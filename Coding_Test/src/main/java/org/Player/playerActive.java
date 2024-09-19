@@ -11,7 +11,7 @@ import static java.lang.System.exit;
 public class playerActive {
     Scanner sc = new Scanner(System.in);
     Random random = new Random();
-    final static enemyActive ea = new enemyActive();
+    static final enemyActive ea = new enemyActive();
 
     public void decrease_hp(Player p, int damage){
         p.setHp(Math.max(p.getHp() - damage, 0));
