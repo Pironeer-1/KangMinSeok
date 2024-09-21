@@ -13,14 +13,13 @@ import static java.util.Locale.filter;
 
 //Main클래스의 모든 메소드
 public class Game {
-    playerActive pa = new playerActive();
-    enemyActive ea = new enemyActive();
-    Scanner sc = new Scanner(System.in);
-    private int status_point = 13;
+    static final playerActive pa = new playerActive();
+    static final enemyActive ea = new enemyActive();
+    static Scanner sc = new Scanner(System.in);
+    private final int status_point = 13;
     private Player[] player_list;
     Enemy enemy;
-    Random random = new Random();
-
+    static Random random = new Random();
 
     public void set_player(){
         int list_num;
@@ -48,7 +47,6 @@ public class Game {
 
     public void set_enemy(){
         enemy = new Enemy(player_list.length);
-
     }
 
     public boolean turn_check(){

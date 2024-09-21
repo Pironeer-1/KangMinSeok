@@ -1,5 +1,6 @@
 package org.Player;
 
+
 public class Player {
     private int hp = 50;
     private int ad = 10;
