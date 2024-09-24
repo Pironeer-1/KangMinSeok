@@ -4,9 +4,7 @@ import com.pironeer.templateCode.member.entity.Member;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
@@ -40,8 +38,14 @@ public class MemberMemoryRepository implements MemberRepository {
                 .findAny();
     }
 
+    @Override
     public boolean existsByMemberId(String memberId) { // 멤버가 존재하는지 확인
         return memberMap.values().stream()
                 .anyMatch(mbr -> mbr.getMemberId().equals(memberId));
+    }
+
+    @Override
+    public List<Member> findAll() {
+        return memberMap.values().stream().toList();
     }
 }

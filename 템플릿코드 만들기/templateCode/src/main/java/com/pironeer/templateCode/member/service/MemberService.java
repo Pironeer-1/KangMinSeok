@@ -8,15 +8,34 @@ import com.pironeer.templateCode.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberMapper memberMapper;
 
-    public MemberResponse save(MemberRequest request){
+    public MemberResponse register(MemberRequest request){
+        if(memberRepository.existsByMemberId(request.memberId())) {
+            throw new RuntimeException("ALREADY EXISTS MEMBER");
+        }
+        Member member = memberRepository.save(MemberMapper.from(request));
+        return MemberResponse.of(member);
+    }
 
-        memberRepository.save(memberMapper);
+    public MemberResponse findById(Long id){
+        Member member = memberRepository.findById(id).orElse(null);
+        return MemberResponse.of(member);
+    }
+
+    public MemberResponse findByMemberId(String memberId){
+        Member member = memberRepository.findByMemberId(memberId).orElse(null);
+        return MemberResponse.of(member);
+    }
+
+    public List<MemberResponse> findAll(){
+        List<Member> members = memberRepository.findAll();
+        return members.stream().map(MemberResponse::of).toList();
     }
 }
