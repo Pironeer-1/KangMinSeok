@@ -1,19 +1,20 @@
 package com.pironeer.templateCode.global.jwt;
 
-import lombok.Value;
+import com.pironeer.templateCode.global.exception.CustomException;
+import com.pironeer.templateCode.global.exception.ErrorCode;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
-import java.security.SignatureException;
-import com.pironeer.templateCode.global.exception.CustomException;
-import com.pironeer.week2_1.global.exception.ErrorCode;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.Date;
+
 @Component
 public class JwtUtil {
 
@@ -29,9 +30,9 @@ public class JwtUtil {
         long now = System.currentTimeMillis();
 
         return Jwts.builder()
-                .claim("id", id) // id
-                .issuedAt(new Date(now)) // iat
-                .expiration(new Date(now + expiration)) // exp
+                .claim("id", id)
+                .issuedAt(new Date(now))
+                .expiration(new Date(now + expiration))
                 .signWith(secretKey)
                 .compact();
     }

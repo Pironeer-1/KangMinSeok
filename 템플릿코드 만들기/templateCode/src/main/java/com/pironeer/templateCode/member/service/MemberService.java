@@ -1,7 +1,10 @@
 package com.pironeer.templateCode.member.service;
 
 import com.pironeer.templateCode.global.dto.response.JwtTokenSet;
-import com.pironeer.templateCode.global.dto.response.SuccessResponse;
+import com.pironeer.templateCode.global.dto.response.result.ResponseData;
+import com.pironeer.templateCode.global.exception.ErrorCode;
+import com.pironeer.templateCode.global.service.AuthService;
+import com.pironeer.templateCode.global.service.ResponseService;
 import com.pironeer.templateCode.member.dto.request.MemberRequest;
 import com.pironeer.templateCode.member.dto.response.MemberResponse;
 import com.pironeer.templateCode.member.entity.Member;
@@ -17,29 +20,25 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final AuthService authService;
 
-    public SuccessResponse<JwtTokenSet> register(MemberRequest request){
+    public ResponseData<JwtTokenSet> register(MemberRequest request){
         if(memberRepository.existsByMemberId(request.memberId())) {
-            throw new RuntimeException("ALREADY EXISTS MEMBER");
+            throw new RuntimeException(ErrorCode.USER_ALREADY_EXIST.getMessage());
         }
 
         Member member = memberRepository.save(MemberMapper.from(request));
-
-        return MemberResponse.of(member);
+        JwtTokenSet token = authService.generateToken(member);
+        return ResponseService.getResponseData(token);
     }
 
-    public MemberResponse findById(Long id){
-        Member member = memberRepository.findById(id).orElse(null);
-        return MemberResponse.of(member);
-    }
-
-    public MemberResponse findByMemberId(String memberId){
-        Member member = memberRepository.findByMemberId(memberId).orElse(null);
-        return MemberResponse.of(member);
-    }
-
-    public List<MemberResponse> findAll(){
-        List<Member> members = memberRepository.findAll();
-        return members.stream().map(MemberResponse::of).toList();
+    public ResponseData<JwtTokenSet> login(MemberRequest request){
+        Member member = memberRepository.findByMemberId(request.memberId())
+                .orElseThrow(() -> new RuntimeException(ErrorCode.USER_NOT_EXIST.getMessage()));
+        if(!member.getPassword().equals(request.password())){
+            throw new RuntimeException(ErrorCode.USER_WRONG_PASSWORD.getMessage());
+        }
+        JwtTokenSet token = authService.generateToken(member);
+        return ResponseService.getResponseData(token);
     }
 }

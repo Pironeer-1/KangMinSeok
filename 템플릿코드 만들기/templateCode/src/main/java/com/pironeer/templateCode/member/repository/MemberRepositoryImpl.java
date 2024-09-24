@@ -8,14 +8,19 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class MemberMemoryRepository implements MemberRepository {
+public class MemberRepositoryImpl implements MemberRepository {
     private final AtomicLong memberIdxGenerator = new AtomicLong(0);
     private final Map<Long, Member> memberMap = new HashMap<>();
+
+    public MemberRepositoryImpl() {
+        Member member = new Member("123", "456", "789");
+        memberMap.put(memberIdxGenerator.incrementAndGet(), member);
+    }
 
     @Override
     public Member save(Member member) {
         if (member.getMemberId() == null) { // 새로 생성
-            Long id = memberIdxGenerator.getAndIncrement();
+            Long id = memberIdxGenerator.incrementAndGet();
             memberMap.put(id, member);
             member.setId(id);
             return member;

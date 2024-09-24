@@ -11,7 +11,7 @@ public class SuccessResponse <T>{
 
     public SuccessResponse(String message, T data) {
         this.message = message;
-        this.result = result;
+        this.result = data;
     }
 
     public static <T> SuccessResponse<T> of (String message, T data){

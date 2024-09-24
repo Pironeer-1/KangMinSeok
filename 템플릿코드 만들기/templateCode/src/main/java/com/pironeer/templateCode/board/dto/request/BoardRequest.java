@@ -1,12 +1,13 @@
-package com.pironeer.templateCode.member.dto.request;
+package com.pironeer.templateCode.board.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record MemberRequest(
+public record BoardRequest(
         @NotBlank
         String memberId,
         @NotBlank
-        String password,
+        String title,
         @NotBlank
-        String name) {
+        String content
+) {
 }
