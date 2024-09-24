@@ -1,5 +1,8 @@
 package com.pironeer.templateCode.member.controller;
 
+import com.pironeer.templateCode.global.dto.response.JwtTokenSet;
+import com.pironeer.templateCode.global.dto.response.SuccessResponse;
+import com.pironeer.templateCode.global.dto.response.result.ResponseData;
 import com.pironeer.templateCode.member.dto.request.MemberRequest;
 import com.pironeer.templateCode.member.dto.response.MemberResponse;
 import com.pironeer.templateCode.member.service.MemberService;
@@ -15,8 +18,7 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<MemberResponse> register(@RequestBody MemberRequest request){
-        MemberResponse response = memberService.register(request);
-        return ResponseEntity.ok().body(response);
+    public SuccessResponse<ResponseData<JwtTokenSet>> register(@RequestBody MemberRequest request){
+        ResponseData<JwtTokenSet> result = memberService.register(request);
     }
 }

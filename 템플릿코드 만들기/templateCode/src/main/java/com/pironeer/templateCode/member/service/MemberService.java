@@ -1,5 +1,7 @@
 package com.pironeer.templateCode.member.service;
 
+import com.pironeer.templateCode.global.dto.response.JwtTokenSet;
+import com.pironeer.templateCode.global.dto.response.SuccessResponse;
 import com.pironeer.templateCode.member.dto.request.MemberRequest;
 import com.pironeer.templateCode.member.dto.response.MemberResponse;
 import com.pironeer.templateCode.member.entity.Member;
@@ -16,11 +18,13 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    public MemberResponse register(MemberRequest request){
+    public SuccessResponse<JwtTokenSet> register(MemberRequest request){
         if(memberRepository.existsByMemberId(request.memberId())) {
             throw new RuntimeException("ALREADY EXISTS MEMBER");
         }
+
         Member member = memberRepository.save(MemberMapper.from(request));
+
         return MemberResponse.of(member);
     }
 
