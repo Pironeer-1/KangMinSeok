@@ -14,6 +14,7 @@ public class MemberMemoryRepository implements MemberRepository {
     private final AtomicLong memberIdxGenerator = new AtomicLong(0);
     private final Map<Long, Member> memberMap = new HashMap<>();
 
+    @Override
     public Member save(Member member) {
         if (member.getMemberId() == null) { // 새로 생성
             Long id = memberIdxGenerator.getAndIncrement();
@@ -26,11 +27,13 @@ public class MemberMemoryRepository implements MemberRepository {
         }
     }
 
+    @Override
     public Optional<Member> findById(long id) { // pk로 멤버 조회
         Assert.notNull(id, "id must not be null");
         return Optional.ofNullable(memberMap.get(id));
     }
 
+    @Override
     public Optional<Member> findByMemberId(String memberId) { // id로 멤버 조회
         return memberMap.values().stream()
                 .filter(mbr -> mbr.getMemberId().equals(memberId))
